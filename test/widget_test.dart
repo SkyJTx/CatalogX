@@ -23,7 +23,7 @@ import 'package:product_catalog_app/state/locale_notifier.dart';
 import 'package:product_catalog_app/state/theme_notifier.dart';
 import 'package:product_catalog_app/state/wishlist_notifier.dart';
 import 'package:product_catalog_app/ui/components/product_card.dart';
-import 'package:product_catalog_app/ui/presentations/product_detail/product_info_section.dart';
+import 'package:product_catalog_app/ui/presentations/product_detail/widgets/detail_bottom_action_bar.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class FakeLocalStorageRepository implements LocalStorageRepository {

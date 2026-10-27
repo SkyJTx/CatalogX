@@ -237,11 +237,15 @@ class HomeWidget extends ConsumerWidget {
                                 color: scheme.primary,
                               ),
                               const Gap(5),
-                              Text(
-                                strings.pullToRefreshHint,
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: scheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w600,
+                              Flexible(
+                                child: Text(
+                                  strings.pullToRefreshHint,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: scheme.onSurfaceVariant,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],

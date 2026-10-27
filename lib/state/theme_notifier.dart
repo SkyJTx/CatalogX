@@ -5,23 +5,26 @@ import 'package:material_ui/material_ui.dart';
 import '/interfaces/local_storage_repository.dart';
 
 class ThemeModeNotifier extends Notifier<ThemeMode> {
+  final LocalStorageRepository _storageRepository;
+
+  ThemeModeNotifier({required this._storageRepository});
+
   @override
   ThemeMode build() {
-    if (GetIt.I.isRegistered<LocalStorageRepository>()) {
-      return GetIt.I<LocalStorageRepository>().getThemeMode();
-    }
-    return ThemeMode.light;
+    return _storageRepository.getThemeMode();
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
-    if (state == mode) return;
-    state = mode;
-    if (GetIt.I.isRegistered<LocalStorageRepository>()) {
-      await GetIt.I<LocalStorageRepository>().setThemeMode(mode);
+    if (state == mode) {
+      return;
     }
+    state = mode;
+    await _storageRepository.setThemeMode(mode);
   }
 }
 
 final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
-  ThemeModeNotifier.new,
+  () => ThemeModeNotifier(
+    storageRepository: GetIt.I<LocalStorageRepository>(),
+  ),
 );

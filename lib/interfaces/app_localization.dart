@@ -6,6 +6,7 @@ abstract interface class AppLocalization {
   bool get isThai;
   String get appTitle;
   String get appSubtitle;
+  String get pullToRefreshHint;
   String get searchHint;
   String get allCategoriesLabel;
   String wishlistFilterLabel(int count);

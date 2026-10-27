@@ -9,13 +9,16 @@ import '/models/catalog_sort_option.dart';
 import '/models/product.dart';
 import '/interfaces/product_repository.dart';
 import '/models/app_exception.dart';
-import 'catalog_state.dart';
-import 'wishlist_notifier.dart';
+import '/state/catalog_state.dart';
+import '/state/wishlist_notifier.dart';
 
 class CatalogNotifier extends Notifier<CatalogState> {
+  final ProductRepository _productRepository;
   Timer? _searchDebounce;
   CancelToken? _activeCancelToken;
   bool _isDisposed = false;
+
+  CatalogNotifier({required this._productRepository});
 
   @override
   CatalogState build() {
@@ -135,8 +138,7 @@ class CatalogNotifier extends Notifier<CatalogState> {
     _activeCancelToken = cancelToken;
 
     try {
-      final repo = GetIt.I<ProductRepository>();
-      final response = await repo.getProducts(
+      final response = await _productRepository.getProducts(
         limit: ApiConstants.pageSize,
         skip: nextSkip,
         searchQuery: state.searchQuery,
@@ -195,8 +197,7 @@ class CatalogNotifier extends Notifier<CatalogState> {
     );
 
     try {
-      final repo = GetIt.I<ProductRepository>();
-      final response = await repo.getProducts(
+      final response = await _productRepository.getProducts(
         limit: ApiConstants.pageSize,
         skip: 0,
         searchQuery: state.searchQuery,
@@ -281,5 +282,7 @@ class CatalogNotifier extends Notifier<CatalogState> {
 }
 
 final catalogProvider = NotifierProvider<CatalogNotifier, CatalogState>(
-  CatalogNotifier.new,
+  () => CatalogNotifier(
+    productRepository: GetIt.I<ProductRepository>(),
+  ),
 );

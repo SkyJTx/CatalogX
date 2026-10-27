@@ -13,7 +13,6 @@ import '/state/locale_notifier.dart';
 import '/state/product_detail_provider.dart';
 import '/state/wishlist_notifier.dart';
 import '/theme.dart';
-import '/ui/components/settings_sheet.dart';
 import '/ui/components/state_feedback_view.dart';
 import '/ui/services/navigator_service.dart';
 import 'product_gallery_section.dart';

@@ -4,6 +4,7 @@ import 'keys.dart';
 import 'models/product.dart';
 import 'ui/presentations/home/home.dart';
 import 'ui/presentations/product_detail/product_detail_screen.dart';
+import 'ui/presentations/settings/settings_page.dart';
 
 final router = GoRouter(
   navigatorKey: navigatorKey,
@@ -13,6 +14,10 @@ final router = GoRouter(
       path: '/',
       builder: (context, state) => const HomeWidget(),
       routes: <RouteBase>[
+        GoRoute(
+          path: 'settings',
+          builder: (context, state) => const SettingsPage(),
+        ),
         GoRoute(
           path: 'products/:id',
           builder: (context, state) {

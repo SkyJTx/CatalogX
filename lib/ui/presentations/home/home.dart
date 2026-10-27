@@ -4,20 +4,21 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../../constants.dart';
-import '../../../models/catalog_filter.dart';
-import '../../../state/catalog_notifier.dart';
-import '../../../state/catalog_state.dart';
-import '../../../state/locale_notifier.dart';
-import '../../../state/wishlist_notifier.dart';
-import '../../../theme.dart';
-import '../../components/catalog_search_bar.dart';
-import '../../components/category_filter_bar.dart';
-import '../../components/product_card.dart';
-import '../../components/product_grid_skeleton.dart';
-import '../../components/settings_sheet.dart';
-import '../../components/state_feedback_view.dart';
-import '../../localization/app_strings.dart';
+import '/constants.dart';
+import '/models/app_language.dart';
+import '/models/catalog_sort_option.dart';
+import '/state/catalog_notifier.dart';
+import '/state/catalog_state.dart';
+import '/state/locale_notifier.dart';
+import '/state/wishlist_notifier.dart';
+import '/theme.dart';
+import '/ui/components/catalog_search_bar.dart';
+import '/ui/components/category_filter_bar.dart';
+import '/ui/components/product_card.dart';
+import '/ui/components/product_grid_skeleton.dart';
+import '/ui/components/settings_sheet.dart';
+import '/ui/components/state_feedback_view.dart';
+import '/ui/localization/app_strings.dart';
 
 class HomeWidget extends ConsumerWidget {
   const HomeWidget({super.key});

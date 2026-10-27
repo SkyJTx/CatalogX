@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
-import '../../models/catalog_filter.dart';
+import '/models/app_language.dart';
+import '/models/catalog_sort_option.dart';
 
 class AppStrings {
   final AppLanguage language;

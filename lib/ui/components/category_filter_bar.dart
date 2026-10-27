@@ -3,12 +3,12 @@ import 'package:gap/gap.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../models/product_category.dart';
-import '../../state/catalog_notifier.dart';
-import '../../state/locale_notifier.dart';
-import '../../state/product_detail_provider.dart';
-import '../../state/wishlist_notifier.dart';
-import '../../theme.dart';
+import '/models/product_category.dart';
+import '/state/catalog_notifier.dart';
+import '/state/locale_notifier.dart';
+import '/state/product_detail_provider.dart';
+import '/state/wishlist_notifier.dart';
+import '/theme.dart';
 
 class CategoryFilterBar extends ConsumerWidget {
   const CategoryFilterBar({super.key});

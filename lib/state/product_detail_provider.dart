@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-import '../models/product.dart';
-import '../models/product_category.dart';
-import '../repo/product_repository.dart';
+import '/models/product.dart';
+import '/models/product_category.dart';
+import '/interfaces/product_repository.dart';
 
 final categoriesProvider = FutureProvider<List<ProductCategory>>((ref) async {
   return GetIt.I<ProductRepository>().getCategories();

@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../models/catalog_filter.dart';
-import '../models/product.dart';
+import '/models/app_language.dart';
+import '/models/product.dart';
 
 abstract interface class LocalStorageRepository {
   ThemeMode getThemeMode();

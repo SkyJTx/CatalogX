@@ -5,17 +5,17 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../../constants.dart';
-import '../../../models/catalog_filter.dart';
-import '../../../models/product.dart';
-import '../../../repo/product_repository.dart';
-import '../../../state/locale_notifier.dart';
-import '../../../state/product_detail_provider.dart';
-import '../../../state/wishlist_notifier.dart';
-import '../../../theme.dart';
-import '../../components/settings_sheet.dart';
-import '../../components/state_feedback_view.dart';
-import '../../services/navigator_service.dart';
+import '/constants.dart';
+import '/models/app_language.dart';
+import '/models/product.dart';
+import '/models/app_exception.dart';
+import '/state/locale_notifier.dart';
+import '/state/product_detail_provider.dart';
+import '/state/wishlist_notifier.dart';
+import '/theme.dart';
+import '/ui/components/settings_sheet.dart';
+import '/ui/components/state_feedback_view.dart';
+import '/ui/services/navigator_service.dart';
 import 'product_gallery_section.dart';
 import 'product_info_section.dart';
 

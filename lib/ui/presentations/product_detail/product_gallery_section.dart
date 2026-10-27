@@ -2,9 +2,9 @@ import 'package:gap/gap.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../models/product.dart';
-import '../../../theme.dart';
-import '../../localization/app_strings.dart';
+import '/models/product.dart';
+import '/theme.dart';
+import '/ui/localization/app_strings.dart';
 
 class ProductGallerySection extends StatelessWidget {
   final Product product;

@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-import '../models/catalog_filter.dart';
-import '../repo/local_storage_repository.dart';
-import '../ui/localization/app_strings.dart';
+import '/models/app_language.dart';
+import '/interfaces/local_storage_repository.dart';
+import '/ui/localization/app_strings.dart';
 
 class LocaleNotifier extends Notifier<AppLanguage> {
   @override

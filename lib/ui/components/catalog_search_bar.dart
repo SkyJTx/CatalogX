@@ -4,9 +4,9 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../models/catalog_filter.dart';
-import '../../state/catalog_notifier.dart';
-import '../../state/locale_notifier.dart';
+import '/models/catalog_sort_option.dart';
+import '/state/catalog_notifier.dart';
+import '/state/locale_notifier.dart';
 
 class CatalogSearchBar extends ConsumerStatefulWidget {
   const CatalogSearchBar({super.key});

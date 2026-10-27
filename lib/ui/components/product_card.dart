@@ -4,11 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../models/product.dart';
-import '../../state/locale_notifier.dart';
-import '../../state/wishlist_notifier.dart';
-import '../../theme.dart';
-import '../services/navigator_service.dart';
+import '/models/product.dart';
+import '/state/locale_notifier.dart';
+import '/state/wishlist_notifier.dart';
+import '/theme.dart';
+import '/ui/services/navigator_service.dart';
 
 class ProductCard extends ConsumerWidget {
   final Product product;

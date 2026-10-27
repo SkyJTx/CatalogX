@@ -1,7 +1,7 @@
-import '../constants.dart';
-import '../models/catalog_filter.dart';
-import '../models/product.dart';
-import '../repo/product_repository.dart';
+import '/constants.dart';
+import '/models/catalog_sort_option.dart';
+import '/models/product.dart';
+import '/models/app_exception.dart';
 
 class CatalogState {
   final List<Product> products;

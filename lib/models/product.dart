@@ -1,6 +1,6 @@
-import 'product_dimensions.dart';
-import 'product_meta.dart';
-import 'product_review.dart';
+import '/models/product_dimensions.dart';
+import '/models/product_meta.dart';
+import '/models/product_review.dart';
 
 class Product {
   final int id;

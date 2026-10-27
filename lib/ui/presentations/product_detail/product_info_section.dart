@@ -3,11 +3,11 @@ import 'package:gap/gap.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../models/product.dart';
-import '../../../models/product_review.dart';
-import '../../../state/wishlist_notifier.dart';
-import '../../../theme.dart';
-import '../../localization/app_strings.dart';
+import '/models/product.dart';
+import '/models/product_review.dart';
+import '/state/wishlist_notifier.dart';
+import '/theme.dart';
+import '/ui/localization/app_strings.dart';
 import 'product_gallery_section.dart';
 
 class ProductInfoSection extends ConsumerWidget {

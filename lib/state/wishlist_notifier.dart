@@ -2,9 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../models/product.dart';
-import '../repo/local_storage_repository.dart';
-import '../ui/services/messenger_service.dart';
+import '/models/product.dart';
+import '/interfaces/local_storage_repository.dart';
+import '/ui/services/messenger_service.dart';
 import 'locale_notifier.dart';
 
 class WishlistNotifier extends Notifier<Map<int, Product>> {

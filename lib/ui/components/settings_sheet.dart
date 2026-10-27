@@ -3,10 +3,10 @@ import 'package:gap/gap.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../models/catalog_filter.dart';
-import '../../state/locale_notifier.dart';
-import '../../state/theme_notifier.dart';
-import '../../state/wishlist_notifier.dart';
+import '/models/app_language.dart';
+import '/state/locale_notifier.dart';
+import '/state/theme_notifier.dart';
+import '/state/wishlist_notifier.dart';
 
 class SettingsSheet extends ConsumerWidget {
   const SettingsSheet({super.key});

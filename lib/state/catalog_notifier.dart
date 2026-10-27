@@ -4,10 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 
-import '../constants.dart';
-import '../models/catalog_filter.dart';
-import '../models/product.dart';
-import '../repo/product_repository.dart';
+import '/constants.dart';
+import '/models/catalog_sort_option.dart';
+import '/models/product.dart';
+import '/interfaces/product_repository.dart';
+import '/models/app_exception.dart';
 import 'catalog_state.dart';
 import 'wishlist_notifier.dart';
 

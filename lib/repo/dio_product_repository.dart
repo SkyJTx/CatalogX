@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 
-import '../constants.dart';
-import '../models/catalog_filter.dart';
-import '../models/product.dart';
-import '../models/product_category.dart';
-import '../models/product_list_response.dart';
-import 'product_repository.dart';
+import '/constants.dart';
+import '/interfaces/product_repository.dart';
+import '/models/app_exception.dart';
+import '/models/catalog_sort_option.dart';
+import '/models/product.dart';
+import '/models/product_category.dart';
+import '/models/product_list_response.dart';
 
 class DioProductRepository implements ProductRepository {
   final Dio _dio;

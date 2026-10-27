@@ -55,7 +55,7 @@ class EnAppLocalization implements AppLocalization {
     required int loaded,
     required int total,
   }) =>
-      'Page $currentPage of $totalPages ? $loaded of $total items';
+      'Page $currentPage of $totalPages — $loaded of $total items';
 
   @override
   String get loadMoreButton => 'Load More';
@@ -207,7 +207,7 @@ class EnAppLocalization implements AppLocalization {
   String get languageSectionTitle => 'Language';
 
   @override
-  String get languageThaiLabel => '???';
+  String get languageThaiLabel => 'ไทย';
 
   @override
   String get languageEnglishLabel => 'English';

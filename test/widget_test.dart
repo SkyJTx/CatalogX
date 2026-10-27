@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:product_catalog_app/di.dart';
+import 'package:product_catalog_app/interfaces/local_storage_repository.dart';
+import 'package:product_catalog_app/interfaces/product_repository.dart';
 import 'package:product_catalog_app/main.dart';
+import 'package:product_catalog_app/models/app_exception.dart';
 import 'package:product_catalog_app/models/app_language.dart';
 import 'package:product_catalog_app/models/catalog_sort_option.dart';
 import 'package:product_catalog_app/models/product.dart';
@@ -14,16 +21,18 @@ import 'package:product_catalog_app/models/product_dimensions.dart';
 import 'package:product_catalog_app/models/product_list_response.dart';
 import 'package:product_catalog_app/models/product_meta.dart';
 import 'package:product_catalog_app/models/product_review.dart';
-import 'package:product_catalog_app/interfaces/local_storage_repository.dart';
-import 'package:product_catalog_app/interfaces/product_repository.dart';
-import 'package:product_catalog_app/models/app_exception.dart';
+import 'package:product_catalog_app/repo/hive_local_storage_repository.dart';
 import 'package:product_catalog_app/router.dart';
 import 'package:product_catalog_app/state/catalog_notifier.dart';
 import 'package:product_catalog_app/state/locale_notifier.dart';
 import 'package:product_catalog_app/state/theme_notifier.dart';
 import 'package:product_catalog_app/state/wishlist_notifier.dart';
-import 'package:product_catalog_app/ui/components/product_card.dart';
+import 'package:product_catalog_app/ui/components/product_card/product_card.dart';
+import 'package:product_catalog_app/ui/localization/app_strings.dart';
+import 'package:product_catalog_app/ui/localization/en_app_localization.dart';
+import 'package:product_catalog_app/ui/localization/th_app_localization.dart';
 import 'package:product_catalog_app/ui/presentations/product_detail/widgets/detail_bottom_action_bar.dart';
+import 'package:product_catalog_app/ui/presentations/settings/settings_page.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class FakeLocalStorageRepository implements LocalStorageRepository {
@@ -204,7 +213,7 @@ void main() {
     router.go('/');
   });
 
-  group('Domain Models & Price Math', () {
+  group('Domain Models, Binary Hive TypeAdapters & Polymorphic Localization', () {
     test('Product.fromJson and toJson preserve fields and compute discounts', () {
       final sample = _buildSampleProducts(count: 1).first;
       final json = sample.toJson();
@@ -217,6 +226,52 @@ void main() {
       expect(restored.savingsAmount, closeTo(27.5, 0.01));
       expect(restored.isLowStock, isTrue);
       expect(restored.dimensions.formatted, '14.6 × 7.1 × 0.8 cm');
+    });
+
+    test('Binary Hive TypeAdapters persist and restore Product on Box<Product>', () async {
+      final tempDir = await Directory.systemTemp.createTemp('catalogx_hive_test_');
+      addTearDown(() async {
+        await Hive.close();
+        if (await tempDir.exists()) {
+          await tempDir.delete(recursive: true);
+        }
+      });
+
+      Hive.init(tempDir.path);
+      registerHiveAdapters();
+
+      final settingsBox = await Hive.openBox<Object?>('test_settings_box');
+      final wishlistBox = await Hive.openBox<Product>('test_wishlist_box');
+      final storage = HiveLocalStorageRepository(
+        settingsBox: settingsBox,
+        wishlistBox: wishlistBox,
+      );
+
+      final sample = _buildSampleProducts(count: 1).first;
+      await storage.saveWishlistProduct(sample);
+
+      final loadedMap = storage.getWishlistProducts();
+      expect(loadedMap.containsKey(sample.id), isTrue);
+      final loaded = loadedMap[sample.id]!;
+      expect(loaded.title, sample.title);
+      expect(loaded.dimensions.width, sample.dimensions.width);
+      expect(loaded.reviews.single.reviewerName, 'Nattakarn K.');
+      expect(loaded.meta.barcode, '1234567890123');
+
+      await storage.removeWishlistProduct(sample.id);
+      expect(storage.getWishlistProducts(), isEmpty);
+    });
+
+    test('Polymorphic AppLocalization resolves ThAppLocalization and EnAppLocalization', () {
+      final AppLocalization th = resolveAppLocalization(AppLanguage.th);
+      final AppLocalization en = resolveAppLocalization(AppLanguage.en);
+
+      expect(th, isA<ThAppLocalization>());
+      expect(en, isA<EnAppLocalization>());
+      expect(th.allCategoriesLabel, 'ทั้งหมด');
+      expect(en.allCategoriesLabel, 'All Objects');
+      expect(th.showingResultsCount(20, 25), 'แสดง 20 จาก 25 รายการ');
+      expect(en.showingResultsCount(20, 25), 'Showing 20 of 25 items');
     });
   });
 
@@ -281,7 +336,7 @@ void main() {
   });
 
   group('Responsive Mobile & Tablet UI Verification', () {
-    testWidgets('Mobile (< 600px) renders 2-column grid, toggles TH/EN, and opens Detail with sticky bottom bar', (tester) async {
+    testWidgets('Mobile (< 600px) renders 2-column grid, navigates to /settings page, and opens Detail', (tester) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -302,6 +357,14 @@ void main() {
       await tester.tap(find.text('TH'));
       await tester.pumpAndSettle();
       expect(find.text('Showing 20 of 25 items'), findsOneWidget);
+
+      await tester.tap(find.byIcon(LucideIcons.slidersHorizontal));
+      await tester.pumpAndSettle();
+      expect(find.byType(SettingsPage), findsOneWidget);
+      expect(find.text('Settings'), findsOneWidget);
+
+      await tester.tap(find.byIcon(LucideIcons.arrowLeft));
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Test Product #1'));
       await tester.pumpAndSettle();

@@ -82,12 +82,12 @@ class ProductTabsSection extends StatelessWidget {
               (
                 label: strings.specDimensionsTitle,
                 value:
-                    '${product.dimensions.formatted} ? ${strings.specWeightValue(product.weight)}',
+                    '${product.dimensions.formatted} · ${strings.specWeightValue(product.weight)}',
               ),
               (
                 label: strings.specSkuTitle,
                 value:
-                    '${product.sku} ? ${strings.specMinOrderValue(product.minimumOrderQuantity)}',
+                    '${product.sku} · ${strings.specMinOrderValue(product.minimumOrderQuantity)}',
               ),
             ],
           ),

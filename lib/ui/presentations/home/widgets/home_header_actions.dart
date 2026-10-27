@@ -89,7 +89,7 @@ class HomeHeaderActions extends ConsumerWidget {
               SnackBar(
                 content: Text(
                   currentLang == AppLanguage.th
-                      ? '????????????????????? $cartCount ????'
+                      ? 'มีสินค้าในถุงช้อปปิ้ง $cartCount ชิ้น'
                       : '$cartCount item(s) in your shopping bag',
                 ),
                 behavior: SnackBarBehavior.floating,

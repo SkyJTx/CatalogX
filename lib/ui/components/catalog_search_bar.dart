@@ -37,38 +37,49 @@ class _CatalogSearchBarState extends ConsumerState<CatalogSearchBar> {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final strings = ref.watch(appStringsProvider);
-    final catalogState = ref.watch(catalogProvider);
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final searchQuery = ref.watch(catalogProvider.select((s) => s.searchQuery));
+    final sortOption = ref.watch(catalogProvider.select((s) => s.sortOption));
 
-    if (_controller.text != catalogState.searchQuery &&
-        catalogState.searchQuery.isEmpty) {
-      _controller.clear();
+    if (_controller.text != searchQuery &&
+        !FocusScope.of(context).hasFocus) {
+      _controller.text = searchQuery;
     }
+
+    final isWide = ResponsiveBreakpoints.of(context).largerThan(MOBILE);
 
     final searchField = TextField(
       controller: _controller,
       onChanged: (value) {
+        setState(() {});
         ref.read(catalogProvider.notifier).updateSearchQuery(value);
       },
       onSubmitted: (value) {
         ref.read(catalogProvider.notifier).submitSearchImmediately(value);
       },
+      textInputAction: TextInputAction.search,
+      style: theme.textTheme.bodyMedium,
       decoration: InputDecoration(
         hintText: strings.searchHint,
-        prefixIcon: Icon(
-          LucideIcons.search,
-          size: 18,
+        hintStyle: theme.textTheme.bodyMedium?.copyWith(
           color: scheme.onSurfaceVariant,
         ),
-        suffixIcon: catalogState.searchQuery.isNotEmpty
+        prefixIcon: Icon(
+          LucideIcons.search,
+          size: 17,
+          color: scheme.onSurfaceVariant,
+        ),
+        suffixIcon: _controller.text.isNotEmpty
             ? IconButton(
                 onPressed: () {
                   _controller.clear();
-                  ref.read(catalogProvider.notifier).submitSearchImmediately('');
+                  setState(() {});
+                  ref
+                      .read(catalogProvider.notifier)
+                      .submitSearchImmediately('');
                 },
                 icon: Icon(
                   LucideIcons.x,
-                  size: 16,
+                  size: 15,
                   color: scheme.onSurfaceVariant,
                 ),
               )
@@ -76,87 +87,83 @@ class _CatalogSearchBarState extends ConsumerState<CatalogSearchBar> {
       ),
     );
 
-    final sortSelector = PopupMenuButton<CatalogSortOption>(
-      initialValue: catalogState.sortOption,
-      onSelected: (option) {
-        ref.read(catalogProvider.notifier).updateSort(option);
-      },
-      itemBuilder: (context) {
-        return CatalogSortOption.values.map((option) {
-          final isSelected = option == catalogState.sortOption;
-          return PopupMenuItem<CatalogSortOption>(
-            value: option,
+    if (!isWide) {
+      return searchField;
+    }
+
+    return Row(
+      children: <Widget>[
+        Expanded(child: searchField),
+        const Gap(12),
+        PopupMenuButton<CatalogSortOption>(
+          initialValue: sortOption,
+          onSelected: (option) {
+            ref.read(catalogProvider.notifier).updateSort(option);
+          },
+          itemBuilder: (context) {
+            return CatalogSortOption.values.map((option) {
+              final selected = option == sortOption;
+              return PopupMenuItem<CatalogSortOption>(
+                value: option,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      selected
+                          ? LucideIcons.check
+                          : LucideIcons.arrowUpDown,
+                      size: 15,
+                      color: selected
+                          ? scheme.onSurface
+                          : scheme.onSurfaceVariant,
+                    ),
+                    const Gap(10),
+                    Text(
+                      strings.sortLabel(option),
+                      style: TextStyle(
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList();
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Icon(
-                  isSelected ? LucideIcons.check : LucideIcons.arrowUpDown,
-                  size: 16,
-                  color: isSelected ? scheme.primary : scheme.onSurfaceVariant,
+                  LucideIcons.slidersHorizontal,
+                  size: 15,
+                  color: scheme.onSurface,
                 ),
                 const Gap(8),
                 Text(
-                  strings.sortLabel(option),
+                  strings.sortLabel(sortOption),
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected ? scheme.primary : scheme.onSurface,
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
+                const Gap(6),
+                Icon(
+                  LucideIcons.chevronDown,
+                  size: 15,
+                  color: scheme.onSurfaceVariant,
                 ),
               ],
             ),
-          );
-        }).toList(growable: false);
-      },
-      child: Container(
-        height: 46,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          color: scheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: scheme.outlineVariant),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              LucideIcons.slidersHorizontal,
-              size: 16,
-              color: scheme.primary,
-            ),
-            const Gap(8),
-            Text(
-              strings.sortLabel(catalogState.sortOption),
-              style: theme.textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Gap(4),
-            Icon(
-              LucideIcons.chevronDown,
-              size: 16,
-              color: scheme.onSurfaceVariant,
-            ),
-          ],
-        ),
-      ),
-    );
-
-    return ResponsiveRowColumn(
-      layout: isMobile
-          ? ResponsiveRowColumnType.COLUMN
-          : ResponsiveRowColumnType.ROW,
-      rowSpacing: 12,
-      columnSpacing: 10,
-      columnCrossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <ResponsiveRowColumnItem>[
-        ResponsiveRowColumnItem(
-          rowFlex: 1,
-          rowFit: FlexFit.tight,
-          child: searchField,
-        ),
-        if (!isMobile)
-          ResponsiveRowColumnItem(
-            child: sortSelector,
           ),
+        ),
       ],
     );
   }

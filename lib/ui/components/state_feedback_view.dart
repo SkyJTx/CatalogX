@@ -44,10 +44,11 @@ class StateFeedbackView extends StatelessWidget {
     required String subtitle,
     required String resetLabel,
     required VoidCallback onReset,
+    bool isWishlist = false,
   }) {
     return StateFeedbackView(
       key: key,
-      icon: LucideIcons.packageSearch,
+      icon: isWishlist ? LucideIcons.heart : LucideIcons.searchX,
       title: title,
       subtitle: subtitle,
       actionLabel: resetLabel,
@@ -59,58 +60,54 @@ class StateFeedbackView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    final accentColor = isError ? scheme.error : scheme.primary;
 
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 420),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: accentColor.withValues(alpha: 0.12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 30,
-                    color: accentColor,
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerHighest,
+                  shape: BoxShape.circle,
                 ),
-                const Gap(16),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                child: Icon(
+                  icon,
+                  size: 24,
+                  color: isError ? scheme.error : scheme.onSurface,
                 ),
-                const Gap(8),
-                Text(
-                  subtitle,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                    height: 1.45,
-                  ),
+              ),
+              const Gap(20),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
-                const Gap(20),
-                FilledButton.icon(
-                  onPressed: onAction,
-                  icon: Icon(
-                    isError ? LucideIcons.refreshCw : LucideIcons.rotateCcw,
-                    size: 16,
-                  ),
-                  label: Text(actionLabel),
+              ),
+              const Gap(8),
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
                 ),
-              ],
-            ),
+              ),
+              const Gap(24),
+              FilledButton.icon(
+                onPressed: onAction,
+                icon: Icon(
+                  isError ? LucideIcons.refreshCw : LucideIcons.rotateCcw,
+                  size: 16,
+                ),
+                label: Text(actionLabel),
+              ),
+            ],
           ),
         ),
       ),

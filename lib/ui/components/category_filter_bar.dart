@@ -8,30 +8,34 @@ import '/state/catalog_notifier.dart';
 import '/state/locale_notifier.dart';
 import '/state/product_detail_provider.dart';
 import '/state/wishlist_notifier.dart';
-import '/theme.dart';
+import '/ui/components/category_filter_item.dart';
 
 class CategoryFilterBar extends ConsumerWidget {
   const CategoryFilterBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final catalogState = ref.watch(catalogProvider);
+    final selectedSlug = ref.watch(
+      catalogProvider.select((s) => s.selectedCategorySlug),
+    );
+    final isWishlistOnly = ref.watch(
+      catalogProvider.select((s) => s.isWishlistOnly),
+    );
     final categoriesAsync = ref.watch(categoriesProvider);
     final wishlistCount = ref.watch(
       wishlistProvider.select((items) => items.length),
     );
     final strings = ref.watch(appStringsProvider);
-
     final categories = categoriesAsync.value ?? const <ProductCategory>[];
-    final isAllSelected = !catalogState.isWishlistOnly &&
-        catalogState.selectedCategorySlug == null;
+
+    final isAllSelected = !isWishlistOnly && selectedSlug == null;
 
     return SizedBox(
-      height: 40,
+      height: 38,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          _CategoryPill(
+          CategoryFilterItem(
             label: strings.allCategoriesLabel,
             isSelected: isAllSelected,
             onTap: () {
@@ -39,25 +43,22 @@ class CategoryFilterBar extends ConsumerWidget {
             },
           ),
           const Gap(8),
-          _CategoryPill(
+          CategoryFilterItem(
             label: strings.wishlistFilterLabel(wishlistCount),
-            icon: catalogState.isWishlistOnly
-                ? Icons.favorite
+            leadingIcon: isWishlistOnly
+                ? Icons.favorite_rounded
                 : LucideIcons.heart,
-            iconColor: catalogState.isWishlistOnly
-                ? Colors.white
-                : AppPalette.discountRose,
-            isSelected: catalogState.isWishlistOnly,
+            isSelected: isWishlistOnly,
             onTap: () {
               ref.read(catalogProvider.notifier).selectWishlistOnly();
             },
           ),
           for (final category in categories) ...<Widget>[
             const Gap(8),
-            _CategoryPill(
+            CategoryFilterItem(
               label: category.name,
-              isSelected: !catalogState.isWishlistOnly &&
-                  catalogState.selectedCategorySlug == category.slug,
+              isSelected:
+                  !isWishlistOnly && selectedSlug == category.slug,
               onTap: () {
                 ref
                     .read(catalogProvider.notifier)
@@ -66,66 +67,6 @@ class CategoryFilterBar extends ConsumerWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class _CategoryPill extends StatelessWidget {
-  final String label;
-  final IconData? icon;
-  final Color? iconColor;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _CategoryPill({
-    required this.label,
-    this.icon,
-    this.iconColor,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-
-    return Material(
-      color: isSelected ? scheme.primary : scheme.surfaceContainerLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(999),
-        side: BorderSide(
-          color: isSelected ? scheme.primary : scheme.outlineVariant,
-        ),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(999),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (icon != null) ...<Widget>[
-                Icon(
-                  icon,
-                  size: 15,
-                  color: iconColor ??
-                      (isSelected ? Colors.white : scheme.onSurfaceVariant),
-                ),
-                const Gap(6),
-              ],
-              Text(
-                label,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: isSelected ? Colors.white : scheme.onSurface,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

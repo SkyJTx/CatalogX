@@ -214,7 +214,7 @@ class EnAppLocalization implements AppLocalization {
 
   @override
   String wishlistStorageSummary(int count) =>
-      '$count saved item(s) stored via Hive TypeAdapter';
+      '$count saved item(s) stored.';
 
   @override
   String get clearWishlistButton => 'Clear Saved Items';

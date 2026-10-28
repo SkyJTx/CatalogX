@@ -215,7 +215,7 @@ class ThAppLocalization implements AppLocalization {
 
   @override
   String wishlistStorageSummary(int count) =>
-      'บันทึกสินค้าผ่าน Hive TypeAdapter แล้ว $count รายการ';
+      'บันทึกสินค้าแล้ว $count รายการ';
 
   @override
   String get clearWishlistButton => 'ล้างรายการที่บันทึก';

@@ -1,6 +1,6 @@
-# product_catalog_app
+# CatalogX
 
-A new Flutter project.
+A Flutter app (Product Catalog Application) for examination.
 
 ## Getting Started
 
